@@ -52,7 +52,7 @@ def main(argv)
   mkdir(svctopdir) 
 
   outdir = "#{svctopdir}/#{sha}"
-  rm_rf(outdir)
+  cmd "rm -rf #{outdir}"
   if ! mkdir(outdir) then 
     eexit "fatal: mkdir failed: #{outdir}"
   end
@@ -88,6 +88,7 @@ def main(argv)
     scroutpath = "/etc/init.d/#{projname}-#{env}-#{procname}"
     writeFile( scroutpath, scr )
     cmd( "chmod 755 #{scroutpath}" )
+    cmd( "ln -s #{projdir}/rel/rumino #{projdir}/sv/rumino" ) 
 
     # endless
     programpath = absprog
