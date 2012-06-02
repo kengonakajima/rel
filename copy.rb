@@ -2,6 +2,7 @@
 
 require "rumino/rumino"
 require "common"
+require "erb"
 
 def main(argv)
 
@@ -73,11 +74,20 @@ def main(argv)
     if !exist(absprog) then
       eexit "fatal: executable not found: #{absprog}"
     end
+
+    # init.d 
+    relwd = conf["workdir"]
+    args = env
+    execpath = "#{svctopdir}/latest/rel/endless.rb"
+    name = "#{projname}_#{env}"
+    pidpath = "/var/run/#{name}.pid"
+    execdir = "#{svctopdir}/latest/#{relwd}"
+    scr = doerb("init.d.tmpl",binding)
+    p scr
   end
 
   # link
   cmd "cd #{svctopdir}; mv latest prev; ln -s #{outdir} latest"
-
   
 end
 
