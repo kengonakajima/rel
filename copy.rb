@@ -85,10 +85,12 @@ def main(argv)
     pidpath = "/var/run/#{name}.pid"
     execdir = "#{svctopdir}/latest/#{projname}/#{relwd}"
     scr = doerb("init.d.tmpl",binding)
-    scroutpath = "/etc/init.d/#{projname}-#{env}-#{procname}"
+    scrname = "#{projname}-#{env}-#{procname}"
+    scroutpath = "/etc/init.d/#{scrname}"
     writeFile( scroutpath, scr )
     cmd( "chmod 755 #{scroutpath}" )
     cmd( "ln -s #{projdir}/rel/rumino #{projdir}/sv/rumino" ) 
+    cmd( "update-rc.d #{scrname} start 30 2 3 4 5 ." )
 
     # endless
     programpath = absprog
