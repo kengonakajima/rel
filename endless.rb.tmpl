@@ -1,0 +1,54 @@
+#! /usr/bin/ruby
+
+require "rumino/rumino"
+
+PROGRAM = "<%=programpath%>"
+LOGFILE = "<%=logpath%>"
+PROGRAMLOGFILE = "<%=programlogpath%>"
+PIDFILE = "<%=pidpath%>"
+EMAILFROM = "<%=emailfrom%>"
+EMAILTO = "<%=emailto%>"
+
+def out( str )
+  s = p(str)
+  appendFile( LOGFILE, s )
+end
+
+
+#
+# main
+#
+
+def main(argv)
+  if argv.size != 1 then 
+    eexit "Usage: endless.rb ENVNAME"
+  end
+
+  env = argv[0]
+
+  savePid( PIDFILE )
+
+  out( "start endless (#{PROGRAM}) in #{Dir.pwd}" )
+
+  while true 
+    out( "starting #{PROGRAM} .." )
+    st = Time.now
+    system( "#{PROGRAM} #{env} > #{PROGRAMLOGFILE} 2>&1" )
+    out( "program finished." )
+    et = Time.now
+
+    tail = `tail -200 #{LOGFILE}`
+    sendmail( EMAILFROM, EMAILTO, "server crash", tail )
+    
+    dt = et.to_i - st.to_i 
+    if dt < 30 then
+      out( "server crashed too quick. sleeping.." )
+      sleep 30
+    end
+
+  end
+
+end
+
+
+main(ARGV)

@@ -68,7 +68,8 @@ def main(argv)
   cmd "find #{projdir} -name '.git*' -exec rm -rf {} \\; 2>&1"
 
   # verify
-  conf["procs"].each do |name,procconf|
+  conf["procs"].each do |procname,procconf|
+    p "configure process #{procname}.."
     prog = procconf["exec"]
     absprog = "#{projdir}/#{prog}"
     if !exist(absprog) then
@@ -78,12 +79,26 @@ def main(argv)
     # init.d 
     relwd = conf["workdir"]
     args = env
-    execpath = "#{svctopdir}/latest/rel/endless.rb"
-    name = "#{projname}_#{env}"
+    endlesspath = "#{svctopdir}/latest/#{projname}/#{relwd}/endless_#{procname}.rb"
+    execpath = endlesspath
+    name = "#{projname}_#{env}_#{procname}"
     pidpath = "/var/run/#{name}.pid"
-    execdir = "#{svctopdir}/latest/#{relwd}"
+    execdir = "#{svctopdir}/latest/#{projname}/#{relwd}"
     scr = doerb("init.d.tmpl",binding)
-    p scr
+    scroutpath = "/etc/init.d/#{projname}-#{env}-#{procname}"
+    writeFile( scroutpath, scr )
+    cmd( "chmod 755 #{scroutpath}" )
+
+    # endless
+    programpath = absprog
+    logpath = "/var/log/#{name}_endless.log"
+    programlogpath = "/var/log/#{name}.log"
+    emailfrom = "#{name}_bot@ringo.io"
+    emailto = "kengo.nakajima@gmail.com"
+    scr = doerb( "endless.rb.tmpl",binding)
+    writeFile( endlesspath, scr )
+    cmd( "chmod 755 #{endlesspath}" )
+
   end
 
   # link
