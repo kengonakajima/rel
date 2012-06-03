@@ -6,6 +6,7 @@ PROGRAM = "<%=programpath%>"
 LOGFILE = "<%=logpath%>"
 PROGRAMLOGFILE = "<%=programlogpath%>"
 PIDFILE = "<%=endlesspidpath%>"
+PROGRAMPIDFILE = "<%=pidpath%>"
 EMAILFROM = "<%=emailfrom%>"
 EMAILTO = "<%=emailto%>"
 
@@ -49,6 +50,13 @@ def main(argv)
 
   end
 
+end
+
+trap("SIGTERM") do
+  pid = File.open(PROGRAMPIDFILE).read.to_i
+  cmd( "kill -TERM #{pid}" )
+  out( "got sigterm. killing child process:#{pid}" )
+  exit 0
 end
 
 

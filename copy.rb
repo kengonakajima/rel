@@ -13,21 +13,16 @@ def main(argv)
 
   env = argv[0]
 
-  topgitdir = "../.git"
-  indir = "../sv"
-  confpath = "../config.json"
 
   # check
-
-  if ! exist(topgitdir) then
+  if ! exist(TOPGITDIR) then
     eexit "project top .git dir not found"
   end
 
-  conf = readJSON(confpath)
+  conf = readJSON(CONFPATH)
   if !conf then 
-    eexit "#{confpath} not found or corrupt"
+    eexit "#{CONFPATH} not found or corrupt"
   end
-  
 
 
   gst = `cd ..; git status`
@@ -82,6 +77,7 @@ def main(argv)
     endlesspath = "#{svctopdir}/latest/#{projname}/#{relwd}/endless_#{procname}.rb"
     execpath = endlesspath
     name = "#{projname}_#{env}_#{procname}"
+    pidpath = "/var/run/#{name}.pid"
     endlesspidpath = "/var/run/#{name}_endless.pid"    
     execdir = "#{svctopdir}/latest/#{projname}/#{relwd}"
     scr = doerb("init.d.tmpl",binding)
@@ -108,7 +104,6 @@ def main(argv)
 
     # config json
     jsonpath = "#{execdir}/#{env}.json"
-    pidpath = "/var/run/#{name}.pid"
     h = { "pidFile" => pidpath }
     if writeFile(jsonpath,h.to_json) then 
       p "wrote #{jsonpath}"
