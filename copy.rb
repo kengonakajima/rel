@@ -124,7 +124,7 @@ def main(argv)
   end
 
   # link
-  cmd "cd #{svctopdir}; mv -f latest prev; ln -s #{outdir} latest"
+  cmd "cd #{svctopdir}; rm -f latest ; ln -s #{outdir} latest"
   
 end
 
