@@ -5,7 +5,7 @@ require "rumino/rumino"
 PROGRAM = "<%=programpath%>"
 LOGFILE = "<%=logpath%>"
 PROGRAMLOGFILE = "<%=programlogpath%>"
-PIDFILE = "<%=pidpath%>"
+PIDFILE = "<%=endlesspidpath%>"
 EMAILFROM = "<%=emailfrom%>"
 EMAILTO = "<%=emailto%>"
 
@@ -37,7 +37,8 @@ def main(argv)
     out( "program finished." )
     et = Time.now
 
-    tail = `tail -200 #{LOGFILE}`
+    tail = `tail -50 #{LOGFILE}`
+    tail += `tail -200 #{PROGRAMLOGFILE}`
     sendmail( EMAILFROM, EMAILTO, "server crash", tail )
     
     dt = et.to_i - st.to_i 

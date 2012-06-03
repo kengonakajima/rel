@@ -75,19 +75,21 @@ def main(argv)
     if !exist(absprog) then
       eexit "fatal: executable not found: #{absprog}"
     end
-
+    
     # init.d 
     relwd = conf["workdir"]
-    args = env
+    args = "#{env}.json"
     endlesspath = "#{svctopdir}/latest/#{projname}/#{relwd}/endless_#{procname}.rb"
     execpath = endlesspath
     name = "#{projname}_#{env}_#{procname}"
-    pidpath = "/var/run/#{name}.pid"
+    endlesspidpath = "/var/run/#{name}_endless.pid"    
     execdir = "#{svctopdir}/latest/#{projname}/#{relwd}"
     scr = doerb("init.d.tmpl",binding)
     scrname = "#{projname}-#{env}-#{procname}"
     scroutpath = "/etc/init.d/#{scrname}"
-    writeFile( scroutpath, scr )
+    if writeFile( scroutpath, scr ) then 
+      p "wrote #{scroutpath}"
+    end      
     cmd( "chmod 755 #{scroutpath}" )
     cmd( "ln -s #{projdir}/rel/rumino #{projdir}/sv/rumino" ) 
     cmd( "update-rc.d #{scrname} start 30 2 3 4 5 ." )
@@ -99,8 +101,18 @@ def main(argv)
     emailfrom = "#{name}_bot@ringo.io"
     emailto = "kengo.nakajima@gmail.com"
     scr = doerb( "endless.rb.tmpl",binding)
-    writeFile( endlesspath, scr )
+    if writeFile( endlesspath, scr ) then
+      p "wrote #{endlesspath}"
+    end
     cmd( "chmod 755 #{endlesspath}" )
+
+    # config json
+    jsonpath = "#{execdir}/#{env}.json"
+    pidpath = "/var/run/#{name}.pid"
+    h = { "pidFile" => pidpath }
+    if writeFile(jsonpath,h.to_json) then 
+      p "wrote #{jsonpath}"
+    end
 
   end
 
