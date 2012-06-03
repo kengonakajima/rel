@@ -4,7 +4,8 @@ stat:
 dev:
 	ruby copy.rb dev
 
-
-restart:
-	ruby ctl.rb dev stop
+start:
 	ruby ctl.rb dev start
+
+stop:
+	ruby ctl.rb dev stop

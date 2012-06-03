@@ -20,16 +20,22 @@ def main(argv)
 
   projname = conf["name"]
 
-  outtbl = []
-  outtbl.push(["Process","endless-pid","endless-ps","svc-pid","svc-ps"])
+  outtbl = nil
+
+  if action == "stat" then
+    outtbl = []
+    outtbl.push(["Process","endless-pid","endless-ps","svc-pid","svc-ps"])
+  end
+
   conf["procs"].each do |procname,procconf|
     name = "#{projname}_#{env}_#{procname}"
     pidpath = "/var/run/#{name}.pid"
     endlesspidpath = "/var/run/#{name}_endless.pid"
+    initpath = "/etc/init.d/#{projname}-#{env}-#{procname}"
 
-    line = [ name,"--","--","--","--" ]
-
+    
     if action == "stat" then
+      line = [ name,"--","--","--","--" ]
       pid = readFile(pidpath)
       if pid then 
         line[3] = pid.to_i
@@ -40,15 +46,17 @@ def main(argv)
         line[1] = epid.to_i
         line[2] = "run" if existProcess(epid.strip.to_i)
       end
+      outtbl.push(line)
     elsif action == "start" then
+      p cmd "#{initpath} start"
     elsif action == "stop" then
-    else
-      eexit "#{action} : unknown action"
+      p cmd "#{initpath} stop"      
     end
-
-    outtbl.push(line)
+    
   end
-  print gentbl(outtbl)
+  if outtbl then 
+    print gentbl(outtbl)
+  end
 end
 
 #
