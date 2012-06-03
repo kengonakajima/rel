@@ -26,11 +26,11 @@ case "$1" in
   start)
 	echo -n "Starting $NAME:"
 
-	if start-stop-daemon --stop -v --signal 0 --chuid root:root --pidfile $PIDFILE 
-    then
-        echo "already running? "
-        exit
-    fi
+#	if start-stop-daemon --stop -v --signal 0 --chuid root:root --oknodo --pidfile $PIDFILE 
+#    then
+#        echo "already running? "
+#        exit
+#    fi
 
 	if start-stop-daemon --start -v --background --pidfile $PIDFILE --umask 007 --chuid root:root --exec $EXEC --chdir $EXECDIR -- $ARGS
 	then

@@ -1,11 +1,21 @@
 stat:
 	ruby ctl.rb dev stat
+	ruby ctl.rb prod stat
 
 dev:
 	ruby copy.rb dev
 
-start:
+prod:
+	ruby copy.rb prod
+
+start_dev:
 	ruby ctl.rb dev start
 
-stop:
+stop_dev:
 	ruby ctl.rb dev stop
+
+start_prod:
+	ruby ctl.rb prod start
+
+stop_prod:
+	ruby ctl.rb prod stop

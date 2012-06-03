@@ -74,7 +74,7 @@ def main(argv)
     # init.d 
     relwd = conf["workdir"]
     args = "#{env}.json"
-    endlesspath = "#{svctopdir}/latest/#{projname}/#{relwd}/endless_#{procname}.rb"
+    endlesspath = "#{projdir}/#{relwd}/endless_#{procname}.rb"
     execpath = endlesspath
     name = "#{projname}_#{env}_#{procname}"
     pidpath = "/var/run/#{name}.pid"
@@ -85,7 +85,9 @@ def main(argv)
     scroutpath = "/etc/init.d/#{scrname}"
     if writeFile( scroutpath, scr ) then 
       p "wrote #{scroutpath}"
-    end      
+    else
+      eexit "can't write #{scroutpath}"
+    end
     cmd( "chmod 755 #{scroutpath}" )
     cmd( "ln -s #{projdir}/rel/rumino #{projdir}/sv/rumino" ) 
     cmd( "update-rc.d #{scrname} start 30 2 3 4 5 ." )
@@ -99,11 +101,13 @@ def main(argv)
     scr = doerb( "endless.rb.tmpl",binding)
     if writeFile( endlesspath, scr ) then
       p "wrote #{endlesspath}"
+    else
+      eexit "can't write #{endlesspath}"
     end
     cmd( "chmod 755 #{endlesspath}" )
 
     # config json
-    jsonpath = "#{execdir}/#{env}.json"
+    jsonpath = "#{projdir}/#{relwd}/#{env}.json"
     envconf = readJSON(jsonpath)
     if envconf then 
       envconf["pidFile"] = pidpath
@@ -113,12 +117,14 @@ def main(argv)
     if writeFile(jsonpath, envconf.to_json) then 
       p "wrote #{jsonpath}"
       p envconf.to_json
+    else
+      eexit "can't write #{jsonpath}"
     end
 
   end
 
   # link
-  cmd "cd #{svctopdir}; mv latest prev; ln -s #{outdir} latest"
+  cmd "cd #{svctopdir}; mv -f latest prev; ln -s #{outdir} latest"
   
 end
 
