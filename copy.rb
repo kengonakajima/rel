@@ -29,7 +29,7 @@ def main(argv)
   lastline = gst.split("\n")[-1]
   if lastline != "nothing to commit (working directory clean)" then 
 #    eexit "working directory has mods!\n#{quote(gst)}"
-    p "DEBUG: working directory has mods!\n#{quote(gst)}"
+    p "DEBUG: working directory has mods!\n#{quote(gst)}"  # for debugging
   end
 
   sha = `cd ..; git log`.split("\n")[0].split(" ")[1].strip
