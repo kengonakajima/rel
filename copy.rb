@@ -104,9 +104,15 @@ def main(argv)
 
     # config json
     jsonpath = "#{execdir}/#{env}.json"
-    h = { "pidFile" => pidpath }
-    if writeFile(jsonpath,h.to_json) then 
+    envconf = readJSON(jsonpath)
+    if envconf then 
+      envconf["pidFile"] = pidpath
+    else
+      envconf = { "pidFile" => pidpath }
+    end
+    if writeFile(jsonpath, envconf.to_json) then 
       p "wrote #{jsonpath}"
+      p envconf.to_json
     end
 
   end
