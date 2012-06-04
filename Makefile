@@ -19,3 +19,6 @@ start_prod:
 
 stop_prod:
 	ruby ctl.rb prod stop
+
+clean_dev:
+	ruby ctl.rb dev clean

@@ -36,6 +36,7 @@ def main(argv)
   if sha.size != 40 then 
     eexit "couldn't get SHA"
   end
+
   
   # copy
   projname = conf["name"]

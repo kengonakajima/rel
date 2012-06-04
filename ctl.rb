@@ -25,8 +25,31 @@ def main(argv)
   if action == "stat" then
     outtbl = []
     outtbl.push(["Process","endless-pid","endless-ps","svc-pid","svc-ps"])
+  elsif action == "clean" then
+    svctopdir = "#{RELDIR}/#{projname}_#{env}"
+    cnt=0
+    cleaned = 0
+    `ls -t #{svctopdir}/`.split("\n").each do |path|
+      if path.size == 40 and path =~ /^([0-9a-f]+)$/ then 
+        dirpath = "#{svctopdir}/#{path}"
+        elt = elapsedTime(dirpath) 
+        toclean = "skip"
+        if elapsedTime(dirpath) > CLEAN_THRES and cnt >= 5 then 
+          toclean = "clean"
+        end
+        cnt += 1
+        print "#{dirpath} : #{shortdate(elt)}, #{toclean}\n"
+        if toclean == "clean" then 
+          cmd "rm -rf #{dirpath}"
+          cleaned += 1
+        end
+      end
+    end
+    p "done. cleaned #{cleaned} dirs."
+    exit 0
   end
 
+  # for each services
   conf["procs"].each do |procname,procconf|
     name = "#{projname}_#{env}_#{procname}"
     pidpath = "/var/run/#{name}.pid"
