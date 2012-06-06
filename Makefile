@@ -22,3 +22,9 @@ stop_prod:
 
 clean_dev:
 	ruby ctl.rb dev clean
+
+tail_prod:
+	ruby ctl.rb prod tail
+
+tail_dev:
+	ruby ctl.rb dev tail

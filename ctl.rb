@@ -25,6 +25,8 @@ def main(argv)
   if action == "stat" then
     outtbl = []
     outtbl.push(["Process","endless-pid","endless-ps","svc-pid","svc-ps"])
+  elsif action == "tail" then
+    system( "tail -f /var/log/#{projname}_#{env}_*" )
   elsif action == "clean" then
     svctopdir = "#{RELDIR}/#{projname}_#{env}"
     cnt=0
