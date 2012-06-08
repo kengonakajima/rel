@@ -1,11 +1,15 @@
-stat:
-	ruby ctl.rb dev stat
+stat_all: stat_prod stat_dev
+
+stat_prod:
 	ruby ctl.rb prod stat
 
-dev:
+stat_dev:
+	ruby ctl.rb dev stat
+
+install_dev:
 	ruby copy.rb dev
 
-prod:
+install_prod:
 	ruby copy.rb prod
 
 start_dev:
@@ -28,3 +32,9 @@ tail_prod:
 
 tail_dev:
 	ruby ctl.rb dev tail
+
+test_prod:
+	ruby ctl.rb prod test
+
+test_dev:
+	ruby ctl.rb dev test

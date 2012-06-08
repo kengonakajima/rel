@@ -7,7 +7,7 @@ require "common"
 
 def main(argv)
   if argv.size != 2 then 
-    eexit "Usage: ctl.rb ENVNAME start|stop|stat"
+    eexit "Usage: ctl.rb ENVNAME start|stop|stat|test|tail"
   end
 
   env = argv[0]
@@ -22,13 +22,14 @@ def main(argv)
 
   outtbl = nil
 
+  svctopdir = "#{RELDIR}/#{projname}_#{env}"
+
   if action == "stat" then
     outtbl = []
     outtbl.push(["Process","endless-pid","endless-ps","svc-pid","svc-ps"])
   elsif action == "tail" then
     system( "tail -f /var/log/#{projname}_#{env}_*" )
   elsif action == "clean" then
-    svctopdir = "#{RELDIR}/#{projname}_#{env}"
     cnt=0
     cleaned = 0
     `ls -t #{svctopdir}/`.split("\n").each do |path|
@@ -58,6 +59,8 @@ def main(argv)
     endlesspidpath = "/var/run/#{name}_endless.pid"
     initpath = "/etc/init.d/#{projname}-#{env}-#{procname}"
 
+    wd = conf["workdir"] 
+    procjson = "#{svctopdir}/latest/#{projname}/#{wd}/#{env}.json"
     
     if action == "stat" then
       line = [ name,"--","--","--","--" ]
@@ -76,6 +79,22 @@ def main(argv)
       p cmd "#{initpath} start"
     elsif action == "stop" then
       p cmd "#{initpath} stop"      
+    elsif action == "test" then 
+      p env
+      cf = readJSON(procjson)
+      p "test:", procname, cf["test"]
+      if cf["test"] then
+        cmdline = cf["test"]["command"]
+        expect = cf["test"]["expect"]
+        res = cmd(cmdline)
+        if expect.strip == res.strip then 
+          p "test OK"
+        else
+          p "test failed. expect:'#{expect}' result:'#{res}'"
+        end
+      else
+        p "'test' config is not found in #{procjson}"
+      end
     end
     
   end
