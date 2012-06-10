@@ -90,7 +90,9 @@ def main(argv)
       eexit "can't write #{scroutpath}"
     end
     cmd( "chmod 755 #{scroutpath}" )
-    cmd( "ln -s #{projdir}/rel/rumino #{projdir}/sv/rumino" ) 
+    if exist("#{projdir}/sv") then
+      cmd( "ln -s #{projdir}/rel/rumino #{projdir}/sv/rumino" ) 
+    end
     cmd( "update-rc.d #{scrname} start 30 2 3 4 5 ." )
 
     # endless
