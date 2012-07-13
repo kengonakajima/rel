@@ -34,7 +34,7 @@ def main(argv)
   while true 
     out( "starting #{PROGRAM} .." )
     st = Time.now
-    system( "#{PROGRAM} #{env} > #{PROGRAMLOGFILE} 2>&1" )
+    system( "#{PROGRAM} #{env}.json > #{PROGRAMLOGFILE} 2>&1" )
     out( "program finished." )
     et = Time.now
 
