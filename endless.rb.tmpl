@@ -22,10 +22,10 @@ end
 
 def main(argv)
   if argv.size != 1 then 
-    eexit "Usage: endless.rb ENVNAME"
+    eexit "Usage: endless.rb ENVCONFPATH"
   end
 
-  env = argv[0]
+  confpath = argv[0]
 
   savePid( PIDFILE )
 
@@ -34,7 +34,9 @@ def main(argv)
   while true 
     out( "starting #{PROGRAM} .." )
     st = Time.now
-    system( "#{PROGRAM} #{env}.json > #{PROGRAMLOGFILE} 2>&1" )
+    cmd = "#{PROGRAM} #{confpath} > #{PROGRAMLOGFILE} 2>&1" 
+    out(cmd)
+    system(cmd)
     out( "program finished." )
     et = Time.now
 
