@@ -28,7 +28,7 @@ def main(argv)
     outtbl = []
     outtbl.push(["Process","endless-pid","endless-ps","svc-pid","svc-ps"])
   elsif action == "tail" then
-    system( "tail -f /var/log/#{projname}_#{env}_*" )
+    system( "tail -n 100 -f /var/log/#{projname}_#{env}_*" )
   elsif action == "clean" then
     cnt=0
     cleaned = 0
