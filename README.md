@@ -1,4 +1,6 @@
 rel
 ===
 
-release tools for my 
+simple depoly tool for minimalist MMOG devs.
+
+
