@@ -73,7 +73,7 @@ def main(argv)
     end
     
     # init.d 
-    relwd = conf["workdir"]
+    relwd = procconf["workdir"]
     args = "#{env}.json"
     endlesspath = "#{projdir}/#{relwd}/endless_#{procname}.rb"
     execpath = endlesspath
