@@ -36,9 +36,13 @@ def main(argv)
     st = Time.now
     cmd = "#{PROGRAM} #{confpath} > #{PROGRAMLOGFILE} 2>&1" 
     out(cmd)
-    system(cmd)
-    out( "program finished." )
+    r = system(cmd)
+    out( "program finished. result:#{r}" )
     et = Time.now
+
+    if r then
+     next
+    end
 
     tail = `tail -50 #{LOGFILE}`
     tail += `tail -200 #{PROGRAMLOGFILE}`

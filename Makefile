@@ -27,6 +27,8 @@ start_prod:
 
 stop_prod:
 	ruby ctl.rb prod stop
+	sleep 0.5
+	ruby ctl.rb prod stat
 
 clean_dev:
 	ruby ctl.rb dev clean

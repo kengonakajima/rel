@@ -59,8 +59,8 @@ def main(argv)
     endlesspidpath = "/var/run/#{name}_endless.pid"
     initpath = "/etc/init.d/#{projname}-#{env}-#{procname}"
 
-    wd = conf["workdir"] 
-    procjson = "#{svctopdir}/latest/#{projname}/#{wd}/#{env}.json"
+    procwd = procconf["workdir"] 
+    procjson = "#{svctopdir}/latest/#{projname}/#{procwd}/#{env}.json"
     
     if action == "stat" then
       line = [ name,"--","--","--","--" ]
