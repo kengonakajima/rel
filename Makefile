@@ -1,4 +1,8 @@
-stat_all: stat_prod stat_dev
+
+
+update_prod: stop_prod install_prod start_prod stat_prod
+
+
 
 stat_prod:
 	ruby ctl.rb prod stat

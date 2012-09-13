@@ -77,8 +77,10 @@ def main(argv)
       outtbl.push(line)
     elsif action == "start" then
       p cmd "#{initpath} start"
+      sleep 2
     elsif action == "stop" then
-      p cmd "#{initpath} stop"      
+      p cmd "#{initpath} stop" 
+      sleep 2
     elsif action == "test" then 
       p env
       cf = readJSON(procjson)
